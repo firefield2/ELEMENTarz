@@ -21,6 +21,7 @@ namespace ELEMENTarz
             InitializeComponent();
             InitTable();
             listOfShops = new ShopList();
+            //aaa
         }
         private void InitTable()
         {
