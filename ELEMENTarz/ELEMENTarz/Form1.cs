@@ -29,6 +29,7 @@ namespace ELEMENTarz
         //private void InitTable()
         //{
         // koment
+        // koment2
         //    table = new DataTable("Data");
         //    table.Columns.Add("Name", typeof(string));
         //    table.Columns.Add("Price", typeof(string));
