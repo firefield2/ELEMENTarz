@@ -13,7 +13,7 @@ namespace ELEMENTarz
 {
     public partial class Form1 : Form
     {
-        ShopList listOfShops;
+        ShopList shops;
         HtmlWeb web = new HtmlWeb();
         int labelCounter;
         bool buttonBlock = false;
@@ -22,14 +22,14 @@ namespace ELEMENTarz
         public Form1()
         {
             InitializeComponent();
-            listOfShops = new ShopList();
-            for (int i = 0; i < listOfShops.ListOfShops.Count; i++)
+            shops = new ShopList();
+            for (int i = 0; i < shops.ListOfShops.Count; i++)
             {
-                listOfShopsToSearch.Items.Add(listOfShops.ListOfShops[i].Name, true);
+                listOfShopsToSearch.Items.Add(shops.ListOfShops[i].Name, true);
             }
         }
 
-        private void displayResoults(List<Result> resoultsList, Shop shop)
+        private void DisplayResoults(List<Result> resoultsList, Shop shop)
         {
             //Create TableLayoutPanel for resoults
             if (resoultsList.Count > 0)
@@ -44,14 +44,14 @@ namespace ELEMENTarz
                 resoultTable.Name = "tableLayoutPanel3";
                 resoultTable.TabIndex = 4;
                 flowLayoutPanel1.Controls.Add(resoultTable);
-                addShopLabel(shop, resoultTable);
+                AddShopLabel(shop, resoultTable);
                 var rows = resoultsList.Count + 1;
                 resoultTable.RowCount = rows;
                 resoultTable.RowStyles.Add(new RowStyle(SizeType.Absolute, 30));
                 for (int i = 0; i < rows - 1; i++)
                 {
                     resoultTable.RowStyles.Add(new RowStyle(SizeType.Absolute, 40));
-                    addLabels(resoultsList[i], shop.Name, i + 1, resoultTable);
+                    AddLabels(resoultsList[i], shop.Name, i + 1, resoultTable);
                 }
                 resoultTable.Size = new Size(155, (rows - 1) * 40 + rows + 1 + 30);
                 resoultTable.ResumeLayout(false);
@@ -59,37 +59,43 @@ namespace ELEMENTarz
             }
         }
 
-        private void addShopLabel(Shop shop, TableLayoutPanel table)
+        private void AddShopLabel(Shop shop, TableLayoutPanel table)
         {
-            Label resoultLabel = new Label();
-            resoultLabel.Anchor = (((((AnchorStyles.Top | AnchorStyles.Bottom) | AnchorStyles.Left) | AnchorStyles.Right)));
-            resoultLabel.Font = new Font("Microsoft Sans Serif", 15F, FontStyle.Regular, GraphicsUnit.Point, ((byte)(238)));
+            Label resoultLabel = new Label()
+            {
+                Anchor = (((((AnchorStyles.Top | AnchorStyles.Bottom) | AnchorStyles.Left) | AnchorStyles.Right))),
+                Font = new Font("Microsoft Sans Serif", 15F, FontStyle.Regular, GraphicsUnit.Point, ((byte)(238))),
+                Location = new Point(4, 1),
+                Name = shop.Name + "Label",
+                TextAlign = ContentAlignment.MiddleCenter,
+                Text = shop.Name
+            };
             table.SetColumnSpan(resoultLabel, 2);
-            resoultLabel.Location = new Point(4, 1);
-            resoultLabel.Name = shop.Name + "Label";
-            resoultLabel.TextAlign = ContentAlignment.MiddleCenter;
-            resoultLabel.Text = shop.Name;
             table.Controls.Add(resoultLabel, 0, 0);
         }
-        private void addLabels(Result resoult, string shop, int row, TableLayoutPanel table)
+        private void AddLabels(Result resoult, string shop, int row, TableLayoutPanel table)
         {
-            Label resoultLabel1 = new Label();
-            resoultLabel1.Anchor = (((((AnchorStyles.Top | AnchorStyles.Bottom) | AnchorStyles.Left) | AnchorStyles.Right)));
-            resoultLabel1.Location = new Point(4, 1);
-            resoultLabel1.Name = shop + "Label" + labelCounter++;
-            resoultLabel1.TextAlign = ContentAlignment.MiddleCenter;
-            resoultLabel1.Text = resoult.Name;
-            Label resoultLabel2 = new Label();
-            resoultLabel2.Anchor = (((((AnchorStyles.Top | AnchorStyles.Bottom) | AnchorStyles.Left) | AnchorStyles.Right)));
-            resoultLabel2.Location = new Point(4, 1);
-            resoultLabel2.Name = shop + "Label" + labelCounter++;
-            resoultLabel2.TextAlign = ContentAlignment.MiddleCenter;
-            resoultLabel2.Text = resoult.Price;
+            Label resoultLabel1 = new Label()
+            {
+                Anchor = (((((AnchorStyles.Top | AnchorStyles.Bottom) | AnchorStyles.Left) | AnchorStyles.Right))),
+                Location = new Point(4, 1),
+                Name = shop + "Label" + labelCounter++,
+                TextAlign = ContentAlignment.MiddleCenter,
+                Text = resoult.Name
+            };
+            Label resoultLabel2 = new Label()
+            {
+                Anchor = (((((AnchorStyles.Top | AnchorStyles.Bottom) | AnchorStyles.Left) | AnchorStyles.Right))),
+                Location = new Point(4, 1),
+                Name = shop + "Label" + labelCounter++,
+                TextAlign = ContentAlignment.MiddleCenter,
+                Text = resoult.Price
+            };
             table.Controls.Add(resoultLabel1, 0, row);
             table.Controls.Add(resoultLabel2, 1, row);
         }
 
-        private async void search_btn_Click(object sender, EventArgs e)
+        private async void Search_btn_Click(object sender, EventArgs e)
         {
             if (!buttonBlock)
             {
@@ -100,21 +106,21 @@ namespace ELEMENTarz
                     search_btn.Text = "Anuluj";
                     progressBar.Visible = true;
                     cancelSearching = false;
-                    progressBar.Maximum = listOfShops.ListOfShops.Count * 10;
+                    progressBar.Maximum = shops.ListOfShops.Count * 10;
                     progressBar.Maximum = listOfShopsToSearch.CheckedItems.Count * 10;
-                    for (int i = 0; i < listOfShops.ListOfShops.Count; i++)
+                    for (int i = 0; i < shops.ListOfShops.Count; i++)
                     {
                         if (!cancelSearching)
                         {
-                            if (listOfShopsToSearch.CheckedItems.Contains(listOfShops.ListOfShops[i].Name))
+                            if (listOfShopsToSearch.CheckedItems.Contains(shops.ListOfShops[i].Name))
                             {
                                 progressBar.PerformStep();
-                                List<Result> data = await listOfShops.ListOfShops[i].SearchParts(toSearch_tb.Text.Trim());
-                                displayResoults(data, listOfShops.ListOfShops[i]);
+                                List<Result> data = await shops.ListOfShops[i].SearchParts(toSearch_tb.Text.Trim());
+                                DisplayResoults(data, shops.ListOfShops[i]);
                             }
                         }
                         else
-                            i = listOfShops.ListOfShops.Count;
+                            i = shops.ListOfShops.Count;
                     }
                     buttonBlock = false;
                     progressBar.Value = progressBar.Minimum;
@@ -129,9 +135,12 @@ namespace ELEMENTarz
 
         }
 
-        private void toSearch_tb_KeyDown(object sender, KeyEventArgs e)
+        private void ToSearch_tb_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Enter) search_btn_Click(this, new EventArgs());
+            if (e.KeyCode == Keys.Enter)
+            {
+                Search_btn_Click(this, new EventArgs());
+            }
         }
     }
 }

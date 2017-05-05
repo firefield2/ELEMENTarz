@@ -53,7 +53,7 @@
             this.search_btn.TabIndex = 1;
             this.search_btn.Text = "Wyszukaj";
             this.search_btn.UseVisualStyleBackColor = true;
-            this.search_btn.Click += new System.EventHandler(this.search_btn_Click);
+            this.search_btn.Click += new System.EventHandler(this.Search_btn_Click);
             // 
             // toSearch_tb
             // 
@@ -65,7 +65,7 @@
             this.toSearch_tb.Name = "toSearch_tb";
             this.toSearch_tb.Size = new System.Drawing.Size(539, 23);
             this.toSearch_tb.TabIndex = 2;
-            this.toSearch_tb.KeyDown += new System.Windows.Forms.KeyEventHandler(this.toSearch_tb_KeyDown);
+            this.toSearch_tb.KeyDown += new System.Windows.Forms.KeyEventHandler(this.ToSearch_tb_KeyDown);
             // 
             // flowLayoutPanel1
             // 
@@ -178,8 +178,6 @@
         #endregion
         private System.Windows.Forms.Button search_btn;
         private System.Windows.Forms.TextBox toSearch_tb;
-        //private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
-        //private System.Windows.Forms.Label label1;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
         private System.Windows.Forms.ProgressBar progressBar;
         private System.Windows.Forms.TabControl tabControl1;
